@@ -4,25 +4,38 @@ import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
   return (
-    <>
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#f8fafc",
+      }}
+    >
+
+      {/* Top Navbar */}
       <Navbar />
 
+      {/* Sidebar + Main Content */}
       <div
         style={{
           display: "flex",
+          width: "100%",
+          minHeight: "calc(100vh - 134px)",
         }}
       >
         <Sidebar />
 
-        <div
+        <main
           style={{
             flex: 1,
-            padding: "20px",
+            minWidth: 0,
+            padding: "45px 42px",
+            boxSizing: "border-box",
+            backgroundColor: "#f8fafc",
           }}
         >
           <Outlet />
-        </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 }

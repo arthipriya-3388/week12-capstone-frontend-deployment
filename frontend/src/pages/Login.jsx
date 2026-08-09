@@ -91,7 +91,7 @@ export default function Login() {
               letterSpacing: "0",
             }}
           >
-           AarogyaCare Multispeciality Hospital Pvt. Ltd.
+            AarogyaCare Multispeciality Hospital Pvt. Ltd.
           </h1>
 
           <p

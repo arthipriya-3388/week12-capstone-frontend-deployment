@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      <h2>Hospital Management System</h2>
+      <h2>Aarogya Care Multispeciality Hospital Management System</h2>
 
       <div>
         <span>

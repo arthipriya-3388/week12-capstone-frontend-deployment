@@ -2,195 +2,113 @@ import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   const menuStyle = {
-    display: "block",
-    padding: "10px 15px",
-    marginBottom: "5px",
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    padding: "12px 14px",
+    marginBottom: "8px",
     textDecoration: "none",
-    color: "#222",
-    borderRadius: "5px",
+    color: "#ffffff",
+    borderRadius: "9px",
+    boxSizing: "border-box",
+    fontSize: "16px",
+    fontWeight: "500",
+    transition: "all 0.2s ease",
   };
 
   const activeStyle = {
-    backgroundColor: "#ddd",
-    fontWeight: "bold",
+    backgroundColor: "#2563eb",
+    fontWeight: "700",
   };
+
+  const iconStyle = {
+    width: "32px",
+    height: "32px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.12)",
+    borderRadius: "8px",
+    marginRight: "12px",
+    fontSize: "17px",
+    flexShrink: 0,
+  };
+
+  const renderLink = (to, label, icon) => (
+    <NavLink
+      to={to}
+      style={({ isActive }) =>
+        isActive
+          ? {
+              ...menuStyle,
+              ...activeStyle,
+            }
+          : menuStyle
+      }
+    >
+      <span style={iconStyle}>{icon}</span>
+      <span>{label}</span>
+    </NavLink>
+  );
 
   return (
     <aside
       style={{
-        width: "240px",
-        minHeight: "calc(100vh - 100px)",
-        backgroundColor: "#f4f4f4",
-        padding: "20px",
+        width: "278px",
+        minWidth: "278px",
+        minHeight: "calc(100vh - 134px)",
+        background: "linear-gradient(180deg, #1749a8 0%, #1554c7 100%)",
+        padding: "28px 15px",
         boxSizing: "border-box",
+        color: "#ffffff",
       }}
     >
-      Menu
+      {/* Menu Heading */}
+      <div
+        style={{
+          fontSize: "16px",
+          fontWeight: "600",
+          color: "#dbeafe",
+          marginBottom: "18px",
+          paddingLeft: "17px",
+          letterSpacing: "0.5px",
+        }}
+      >
+        MENU
+      </div>
 
       {/* Dashboard */}
-      <NavLink
-        to="/dashboard"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Dashboard
-      </NavLink>
+      {renderLink("/dashboard", "Dashboard", "⌂")}
 
-      {/* Register User - Admin */}
-      <NavLink
-        to="/register-user"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Register User
-      </NavLink>
+      {/* Register User */}
+      {renderLink("/register-user", "Register User", "♟")}
 
       {/* Departments */}
-      <NavLink
-        to="/departments"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Departments
-      </NavLink>
+      {renderLink("/departments", "Departments", "▦")}
 
       {/* Doctors */}
-      <NavLink
-        to="/doctors"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Doctors
-      </NavLink>
+      {renderLink("/doctors", "Doctors", "♟")}
 
       {/* Patients */}
-      <NavLink
-        to="/patients"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Patients
-      </NavLink>
+      {renderLink("/patients", "Patients", "♟")}
 
       {/* Appointments */}
-      <NavLink
-        to="/appointments"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Appointments
-      </NavLink>
+      {renderLink("/appointments", "Appointments", "▣")}
 
       {/* Laboratory */}
-      <NavLink
-        to="/laboratory"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Laboratory
-      </NavLink>
+      {renderLink("/laboratory", "Laboratory", "⚗")}
 
       {/* Medicines */}
-      <NavLink
-        to="/medicines"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Medicines
-      </NavLink>
+      {renderLink("/medicines", "Medicines", "💊")}
 
       {/* Prescriptions */}
-      <NavLink
-        to="/prescriptions"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Prescriptions
-      </NavLink>
+      {renderLink("/prescriptions", "Prescriptions", "▤")}
 
       {/* Billing */}
-      <NavLink
-        to="/billing"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Billing
-      </NavLink>
+      {renderLink("/billing", "Billing", "▥")}
 
       {/* Reports */}
-      <NavLink
-        to="/reports"
-        style={({ isActive }) =>
-          isActive
-            ? {
-                ...menuStyle,
-                ...activeStyle,
-              }
-            : menuStyle
-        }
-      >
-        Reports
-      </NavLink>
+      {renderLink("/reports", "Reports", "▥")}
     </aside>
   );
 };
