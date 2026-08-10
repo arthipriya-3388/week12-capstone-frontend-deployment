@@ -108,9 +108,7 @@ const Appointments = () => {
     }
   };
 
-  /*
-   * Add / Update Appointment
-   */
+  
   const handleSubmit = async (
     appointmentData
   ) => {
@@ -161,9 +159,7 @@ const Appointments = () => {
     }
   };
 
-  /*
-   * Edit Appointment
-   */
+  
   const handleEdit = (appointment) => {
     setEditingAppointment(appointment);
 
@@ -180,9 +176,7 @@ const Appointments = () => {
     });
   };
 
-  /*
-   * Cancel Edit
-   */
+  
   const handleCancel = () => {
     setEditingAppointment(null);
 
@@ -193,9 +187,7 @@ const Appointments = () => {
     );
   };
 
-  /*
-   * Delete Appointment
-   */
+  
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this appointment?"

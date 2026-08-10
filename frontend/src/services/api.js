@@ -7,7 +7,7 @@ const api = axios.create({
   },
 });
 
-// Add JWT token automatically to every request
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -23,7 +23,7 @@ api.interceptors.request.use(
   }
 );
 
-// Handle unauthorized requests
+
 api.interceptors.response.use(
   (response) => {
     return response;

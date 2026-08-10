@@ -19,7 +19,7 @@ const Departments = () => {
 
   const [success, setSuccess] = useState("");
 
-  // Fetch Departments
+  
   const fetchDepartments = () => {
     setLoading(true);
     setError("");
@@ -59,7 +59,7 @@ const Departments = () => {
       });
   };
 
-  // Initial Load
+ 
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchDepartments();
@@ -70,7 +70,7 @@ const Departments = () => {
     };
   }, []);
 
-  // Add / Update Department
+  
   const handleSubmit = async (departmentData) => {
     try {
       setFormLoading(true);
@@ -78,7 +78,7 @@ const Departments = () => {
       setSuccess("");
 
       if (editingDepartment) {
-        // Update Department
+        
         await api.put(
           `/departments/${editingDepartment.id}`,
           departmentData
@@ -88,7 +88,7 @@ const Departments = () => {
           "Department updated successfully."
         );
       } else {
-        // Create Department
+        
         await api.post(
           "/departments",
           departmentData
@@ -99,10 +99,10 @@ const Departments = () => {
         );
       }
 
-      // Clear edit mode
+      
       setEditingDepartment(null);
 
-      // Refresh department list
+      
       fetchDepartments();
     } catch (err) {
       console.error(
@@ -119,7 +119,7 @@ const Departments = () => {
     }
   };
 
-  // Edit Department
+  
   const handleEdit = (department) => {
     setEditingDepartment(department);
 
@@ -132,14 +132,14 @@ const Departments = () => {
     });
   };
 
-  // Cancel Edit
+ 
   const handleCancel = () => {
     setEditingDepartment(null);
     setError("");
     setSuccess("");
   };
 
-  // Delete Department
+  
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this department?"

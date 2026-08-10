@@ -46,7 +46,7 @@ const PatientForm = ({
   const validateForm = () => {
     const newErrors = {};
 
-    // Patient Name
+    
     if (!patientName.trim()) {
       newErrors.patientName =
         "Patient name is required.";
@@ -58,7 +58,7 @@ const PatientForm = ({
         "Patient name cannot exceed 100 characters.";
     }
 
-    // Age
+    
     if (!age) {
       newErrors.age = "Age is required.";
     } else if (!/^\d+$/.test(age)) {
@@ -69,12 +69,12 @@ const PatientForm = ({
       newErrors.age = "Age cannot exceed 120.";
     }
 
-    // Gender
+    
     if (!gender) {
       newErrors.gender = "Gender is required.";
     }
 
-    // Phone
+    
     if (!phone.trim()) {
       newErrors.phone =
         "Phone number is required.";
@@ -83,7 +83,7 @@ const PatientForm = ({
         "Phone number must contain exactly 10 digits.";
     }
 
-    // Email
+    
     if (!email.trim()) {
       newErrors.email = "Email is required.";
     } else if (
@@ -95,18 +95,18 @@ const PatientForm = ({
         "Enter a valid email address.";
     }
 
-    // Address
+    
     if (!address.trim()) {
       newErrors.address = "Address is required.";
     }
 
-    // Blood Group
+    
     if (!bloodGroup) {
       newErrors.bloodGroup =
         "Blood group is required.";
     }
 
-    // Emergency Contact
+    
     if (!emergencyContact.trim()) {
       newErrors.emergencyContact =
         "Emergency contact is required.";
@@ -119,7 +119,7 @@ const PatientForm = ({
         "Emergency contact must contain exactly 10 digits.";
     }
 
-    // Status
+   
     if (!status) {
       newErrors.status = "Status is required.";
     }

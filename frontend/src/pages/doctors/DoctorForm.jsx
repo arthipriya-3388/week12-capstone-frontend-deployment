@@ -157,7 +157,7 @@ const DoctorForm = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  // Submit
+  
   const handleSubmit = (event) => {
     event.preventDefault();
 

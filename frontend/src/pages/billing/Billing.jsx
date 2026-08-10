@@ -75,10 +75,7 @@ const Billing = () => {
     };
   }, []);
 
-  // --------------------------------------------------
-  // Handle Form Changes
-  // --------------------------------------------------
-
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -88,10 +85,7 @@ const Billing = () => {
     }));
   };
 
-  // --------------------------------------------------
-  // Generate Bill
-  // --------------------------------------------------
-
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -134,27 +128,20 @@ const Billing = () => {
     }
   };
 
-  // --------------------------------------------------
-  // Start Payment
-  // --------------------------------------------------
+  
 
   const handleStartPayment = (billId) => {
     setPaymentBillId(billId);
     setPaymentMethod("");
   };
 
-  // --------------------------------------------------
-  // Cancel Payment
-  // --------------------------------------------------
 
   const handleCancelPayment = () => {
     setPaymentBillId(null);
     setPaymentMethod("");
   };
 
-  // --------------------------------------------------
-  // Record Payment
-  // --------------------------------------------------
+  
 
   const handleRecordPayment = async (billId) => {
     if (!paymentMethod) {
@@ -199,10 +186,7 @@ const Billing = () => {
     }
   };
 
-  // --------------------------------------------------
-  // Patient Name
-  // --------------------------------------------------
-
+ 
   const getPatientName = (patient) => {
     if (!patient) {
       return "-";
@@ -221,9 +205,7 @@ const Billing = () => {
     );
   };
 
-  // --------------------------------------------------
-  // Search Bills
-  // --------------------------------------------------
+  
 
   const filteredBills = bills.filter((bill) => {
     const patientName = getPatientName(
@@ -247,9 +229,6 @@ const Billing = () => {
     );
   });
 
-  // --------------------------------------------------
-  // Format Amount
-  // --------------------------------------------------
 
   const formatAmount = (amount) => {
     const value = Number(amount || 0);
@@ -257,9 +236,7 @@ const Billing = () => {
     return `₹${value.toFixed(2)}`;
   };
 
-  // --------------------------------------------------
-  // Styles
-  // --------------------------------------------------
+  
 
   const pageStyle = {
     padding: "30px 20px",
@@ -699,9 +676,6 @@ const Billing = () => {
   );
 };
 
-// --------------------------------------------------
-// Table Styles
-// --------------------------------------------------
 
 const tableHeaderStyle = {
   border: "1px solid #ddd",

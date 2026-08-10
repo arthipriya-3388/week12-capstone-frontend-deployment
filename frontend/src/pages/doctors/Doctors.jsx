@@ -26,7 +26,7 @@ const Doctors = () => {
   const [success, setSuccess] =
     useState("");
 
-  // Fetch Doctors
+  
   const fetchDoctors = () => {
     setLoading(true);
     setError("");
@@ -71,7 +71,7 @@ const Doctors = () => {
       });
   };
 
-  // Fetch Departments
+  
   const fetchDepartments = () => {
     api
       .get("/departments")
@@ -111,7 +111,6 @@ const Doctors = () => {
       });
   };
 
-  // Initial Load
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchDoctors();
@@ -123,7 +122,7 @@ const Doctors = () => {
     };
   }, []);
 
-  // Add / Update Doctor
+  
   const handleSubmit = async (
     doctorData
   ) => {console.log(
@@ -141,7 +140,7 @@ const Doctors = () => {
       );
 
       if (editingDoctor) {
-        // Update
+        
         await api.put(
           `/doctors/${editingDoctor.id}`,
           doctorData
@@ -151,7 +150,7 @@ const Doctors = () => {
           "Doctor updated successfully."
         );
       } else {
-        // Create
+        
         await api.post(
           "/doctors",
           doctorData
@@ -186,7 +185,7 @@ const Doctors = () => {
     }
   };
 
-  // Edit Doctor
+  
   const handleEdit = (doctor) => {
     setEditingDoctor(doctor);
 
@@ -199,7 +198,7 @@ const Doctors = () => {
     });
   };
 
-  // Cancel Edit
+ 
   const handleCancel = () => {
     setEditingDoctor(null);
 
@@ -207,7 +206,7 @@ const Doctors = () => {
     setSuccess("");
   };
 
-  // Delete Doctor
+  
   const handleDelete = async (id) => {
     const confirmed =
       window.confirm(

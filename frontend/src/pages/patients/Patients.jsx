@@ -17,9 +17,7 @@ const Patients = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  /*
-   * Fetch Patients
-   */
+  
   const fetchPatients = async () => {
     try {
       setError("");
@@ -58,12 +56,7 @@ const Patients = () => {
     }
   };
 
-  /*
-   * Initial Load
-   *
-   * The API call is asynchronous, so the
-   * state updates happen after the request.
-   */
+  
   useEffect(() => {
     let isMounted = true;
 
@@ -112,9 +105,7 @@ const Patients = () => {
     };
   }, []);
 
-  /*
-   * Add / Update Patient
-   */
+  
   const handleSubmit = async (patientData) => {
     try {
       setFormLoading(true);
@@ -159,9 +150,7 @@ const Patients = () => {
     }
   };
 
-  /*
-   * Edit Patient
-   */
+  
   const handleEdit = (patient) => {
     setEditingPatient(patient);
     setError("");
@@ -173,18 +162,14 @@ const Patients = () => {
     });
   };
 
-  /*
-   * Cancel Edit
-   */
+  
   const handleCancel = () => {
     setEditingPatient(null);
     setError("");
     setSuccess("");
   };
 
-  /*
-   * Delete Patient
-   */
+  
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this patient?"

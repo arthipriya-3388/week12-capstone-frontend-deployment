@@ -79,9 +79,7 @@ const PrescriptionForm = ({
     };
   }, [editingPrescription]);
 
-  // --------------------------------------------------
-  // Reset Form
-  // --------------------------------------------------
+  
 
   const resetForm = () => {
     setPatientId("");
@@ -96,9 +94,6 @@ const PrescriptionForm = ({
     setSubmitError("");
   };
 
-  // --------------------------------------------------
-  // Validate Form
-  // --------------------------------------------------
 
   const validateForm = () => {
     const newErrors = {};
@@ -146,9 +141,7 @@ const PrescriptionForm = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  // --------------------------------------------------
-  // Submit Prescription
-  // --------------------------------------------------
+ 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -219,9 +212,6 @@ const PrescriptionForm = ({
     }
   };
 
-  // --------------------------------------------------
-  // Cancel
-  // --------------------------------------------------
 
   const handleCancel = () => {
     resetForm();

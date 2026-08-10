@@ -109,9 +109,7 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
-/* =========================================
-   LOGIN PAGE
-   ========================================= */
+
 
 .login-page {
   min-height: 100vh;
@@ -137,7 +135,7 @@ code {
   text-align: center;
 }
 
-/* Hospital Icon */
+
 
 .hospital-icon {
   width: 70px;
@@ -151,7 +149,7 @@ code {
   font-size: 36px;
 }
 
-/* Login Heading */
+
 
 .login-title {
   margin: 0 0 10px;
@@ -162,7 +160,7 @@ code {
   letter-spacing: -0.5px;
 }
 
-/* Subtitle */
+
 
 .login-subtitle {
   margin: 0 0 30px;
@@ -171,14 +169,14 @@ code {
   line-height: 1.5;
 }
 
-/* Form */
+
 
 .login-form {
   width: 100%;
   text-align: left;
 }
 
-/* Field */
+
 
 .login-field {
   margin-bottom: 20px;
@@ -192,7 +190,7 @@ code {
   color: #374151;
 }
 
-/* Inputs */
+
 
 .login-field input {
   width: 100%;
@@ -224,7 +222,7 @@ code {
   cursor: not-allowed;
 }
 
-/* Error Message */
+
 
 .login-error {
   margin-bottom: 20px;
@@ -238,7 +236,7 @@ code {
   line-height: 1.4;
 }
 
-/* Login Button */
+
 
 .login-button {
   width: 100%;
@@ -268,7 +266,7 @@ code {
   cursor: not-allowed;
 }
 
-/* Footer */
+
 
 .login-footer {
   margin-top: 25px;
@@ -276,7 +274,7 @@ code {
   font-size: 13px;
 }
 
-/* Responsive */
+
 
 @media (max-width: 600px) {
   .login-page {

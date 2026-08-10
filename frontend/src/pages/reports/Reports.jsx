@@ -98,9 +98,7 @@ const Reports = () => {
     };
   }, []);
 
-  // --------------------------------------------------
-  // Format Currency
-  // --------------------------------------------------
+  
 
   const formatAmount = (amount) => {
     const value = Number(amount || 0);
@@ -108,9 +106,7 @@ const Reports = () => {
     return `₹${value.toFixed(2)}`;
   };
 
-  // --------------------------------------------------
-  // Styles
-  // --------------------------------------------------
+  
 
   const pageStyle = {
     padding: "30px 20px",

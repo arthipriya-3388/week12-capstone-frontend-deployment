@@ -20,11 +20,11 @@ const DepartmentForm = ({
 
   const [errors, setErrors] = useState({});
 
-  // Validate form
+  
   const validateForm = () => {
     const newErrors = {};
 
-    // Department Name validation
+    
     if (!departmentName.trim()) {
       newErrors.departmentName =
         "Department name is required.";
@@ -36,7 +36,7 @@ const DepartmentForm = ({
         "Department name cannot exceed 100 characters.";
     }
 
-    // Description validation
+   
     if (!description.trim()) {
       newErrors.description =
         "Description is required.";
@@ -48,7 +48,7 @@ const DepartmentForm = ({
         "Description cannot exceed 500 characters.";
     }
 
-    // Status validation
+    
     if (!status) {
       newErrors.status = "Status is required.";
     }
@@ -58,7 +58,7 @@ const DepartmentForm = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  // Submit form
+  
   const handleSubmit = (event) => {
     event.preventDefault();
 
