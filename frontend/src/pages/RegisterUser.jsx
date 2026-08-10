@@ -35,15 +35,41 @@ const RegisterUser = () => {
     setMessage("");
     setError("");
 
+    // -----------------------------
+    // Full Name Validation
+    // -----------------------------
+
     if (!formData.fullName.trim()) {
       setError("Full name is required.");
       return;
     }
 
+    if (formData.fullName.trim().length < 3) {
+      setError("Full name must be at least 3 characters.");
+      return;
+    }
+
+    // -----------------------------
+    // Email Validation
+    // -----------------------------
+
     if (!formData.email.trim()) {
       setError("Email is required.");
       return;
     }
+
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        formData.email
+      )
+    ) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    // -----------------------------
+    // Password Validation
+    // -----------------------------
 
     if (!formData.password) {
       setError("Password is required.");
@@ -51,19 +77,57 @@ const RegisterUser = () => {
     }
 
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setError(
+        "Password must be at least 6 characters."
+      );
       return;
     }
 
-    if (!/^[0-9]{10}$/.test(formData.phone)) {
-      setError("Phone number must be exactly 10 digits.");
+    if (!/[A-Z]/.test(formData.password)) {
+      setError(
+        "Password must contain at least one uppercase letter."
+      );
       return;
     }
+
+    if (!/[a-z]/.test(formData.password)) {
+      setError(
+        "Password must contain at least one lowercase letter."
+      );
+      return;
+    }
+
+    if (!/[0-9]/.test(formData.password)) {
+      setError(
+        "Password must contain at least one number."
+      );
+      return;
+    }
+
+    // -----------------------------
+    // Phone Validation
+    // -----------------------------
+
+    if (!/^[0-9]{10}$/.test(formData.phone)) {
+      setError(
+        "Phone number must be exactly 10 digits."
+      );
+      return;
+    }
+
+    // -----------------------------
+    // Register User
+    // -----------------------------
 
     try {
       setLoading(true);
 
-      await api.post(
+      console.log(
+        "Register request:",
+        formData
+      );
+
+      const response = await api.post(
         "/auth/register",
         formData,
         {
@@ -73,7 +137,14 @@ const RegisterUser = () => {
         }
       );
 
-      setMessage("User registered successfully.");
+      console.log(
+        "Registration response:",
+        response.data
+      );
+
+      setMessage(
+        "User registered successfully."
+      );
 
       setFormData({
         fullName: "",
@@ -83,13 +154,42 @@ const RegisterUser = () => {
         role: "Doctor",
       });
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.error(
+        "Registration failed:",
+        error
+      );
 
-      const responseMessage =
-        error.response?.data?.message ||
-        "Registration failed. Please try again.";
+      console.log(
+        "Backend response:",
+        error.response?.data
+      );
 
-      setError(responseMessage);
+      // Get backend message
+      const backendMessage =
+        error.response?.data?.message;
+
+      // Get detailed validation errors
+      const validationErrors =
+        error.response?.data?.data;
+
+      if (
+        Array.isArray(validationErrors) &&
+        validationErrors.length > 0
+      ) {
+        const firstError =
+          validationErrors[0];
+
+        setError(
+          firstError.msg ||
+            backendMessage ||
+            "Validation failed."
+        );
+      } else {
+        setError(
+          backendMessage ||
+            "Registration failed. Please try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -98,7 +198,9 @@ const RegisterUser = () => {
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h1 style={styles.title}>Register User</h1>
+        <h1 style={styles.title}>
+          Register User
+        </h1>
 
         <p style={styles.subtitle}>
           Create an account for a hospital employee.
@@ -121,7 +223,6 @@ const RegisterUser = () => {
             />
           </div>
 
-
           {/* Email */}
           <div style={styles.formGroup}>
             <label>Email</label>
@@ -137,7 +238,6 @@ const RegisterUser = () => {
             />
           </div>
 
-
           {/* Password */}
           <div style={styles.formGroup}>
             <label>Password</label>
@@ -151,8 +251,13 @@ const RegisterUser = () => {
               disabled={loading}
               style={styles.input}
             />
-          </div>
 
+            <small style={styles.passwordHint}>
+              Must contain at least 6 characters,
+              one uppercase letter, one lowercase
+              letter, and one number.
+            </small>
+          </div>
 
           {/* Phone */}
           <div style={styles.formGroup}>
@@ -170,7 +275,6 @@ const RegisterUser = () => {
             />
           </div>
 
-
           {/* Role */}
           <div style={styles.formGroup}>
             <label>Role</label>
@@ -182,20 +286,27 @@ const RegisterUser = () => {
               disabled={loading}
               style={styles.input}
             >
-              <option value="Doctor">Doctor</option>
-              <option value="Nurse">Nurse</option>
+              <option value="Doctor">
+                Doctor
+              </option>
+
+              <option value="Nurse">
+                Nurse
+              </option>
+
               <option value="Lab Technician">
                 Lab Technician
               </option>
+
               <option value="Pharmacist">
                 Pharmacist
               </option>
+
               <option value="Receptionist">
                 Receptionist
               </option>
             </select>
           </div>
-
 
           {/* Error */}
           {error && (
@@ -204,7 +315,6 @@ const RegisterUser = () => {
             </p>
           )}
 
-
           {/* Success */}
           {message && (
             <p style={styles.success}>
@@ -212,21 +322,21 @@ const RegisterUser = () => {
             </p>
           )}
 
-
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
             style={styles.button}
           >
-            {loading ? "Registering..." : "Register User"}
+            {loading
+              ? "Registering..."
+              : "Register User"}
           </button>
-
         </form>
       </div>
     </div>
   );
 };
-
 
 const styles = {
   page: {
@@ -239,7 +349,8 @@ const styles = {
     backgroundColor: "#ffffff",
     padding: "30px",
     borderRadius: "12px",
-    boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
+    boxShadow:
+      "0 4px 15px rgba(0,0,0,0.08)",
   },
 
   title: {
@@ -267,6 +378,14 @@ const styles = {
     fontSize: "15px",
   },
 
+  passwordHint: {
+    display: "block",
+    marginTop: "6px",
+    color: "#6b7280",
+    fontSize: "12px",
+    lineHeight: "1.4",
+  },
+
   button: {
     width: "100%",
     padding: "12px",
@@ -288,6 +407,5 @@ const styles = {
     marginBottom: "15px",
   },
 };
-
 
 export default RegisterUser;
