@@ -14,9 +14,7 @@ const Appointments = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  /*
-   * Load appointments
-   */
+  
   useEffect(() => {
     let isMounted = true;
 
@@ -66,10 +64,7 @@ const Appointments = () => {
     };
   }, []);
 
-  /*
-   * Refresh appointments after
-   * create / reschedule / cancel / delete
-   */
+
   const refreshAppointments = async () => {
     try {
       const response = await api.get("/appointments");
@@ -101,9 +96,7 @@ const Appointments = () => {
     }
   };
 
-  /*
-   * Add appointment / Reschedule appointment
-   */
+ 
   const handleSubmit = async (appointmentData) => {
     try {
       setFormLoading(true);
@@ -152,11 +145,7 @@ const Appointments = () => {
     }
   };
 
-  /*
-   * Reschedule appointment
-   *
-   * Opens the existing appointment in the form.
-   */
+ 
   const handleReschedule = (appointment) => {
     setEditingAppointment(appointment);
 
@@ -173,9 +162,7 @@ const Appointments = () => {
     });
   };
 
-  /*
-   * Cancel appointment
-   */
+  
   const handleCancelAppointment = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to cancel this appointment?"
@@ -211,11 +198,7 @@ const Appointments = () => {
     }
   };
 
-  /*
-   * Cancel rescheduling
-   *
-   * This is the Cancel button inside the form.
-   */
+ 
   const handleFormCancel = () => {
     setEditingAppointment(null);
     setError("");
@@ -225,9 +208,7 @@ const Appointments = () => {
     );
   };
 
-  /*
-   * Delete appointment
-   */
+  
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this appointment?"
