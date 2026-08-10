@@ -2,44 +2,43 @@ import { useState } from "react";
 
 const AppointmentForm = ({
   editingAppointment,
+  reschedulingAppointment,
   onSubmit,
   onCancel,
   loading,
 }) => {
+  const isRescheduling = !!reschedulingAppointment;
+  const currentAppointment =
+    reschedulingAppointment || editingAppointment;
+
   const [patientId, setPatientId] = useState(
-    editingAppointment?.patientId?.toString() || ""
+    currentAppointment?.patientId?.toString() || ""
   );
 
   const [doctorId, setDoctorId] = useState(
-    editingAppointment?.doctorId?.toString() || ""
+    currentAppointment?.doctorId?.toString() || ""
   );
 
   const [appointmentDate, setAppointmentDate] =
     useState(
-      editingAppointment?.appointmentDate
-        ? editingAppointment.appointmentDate.substring(
-            0,
-            10
-          )
+      currentAppointment?.appointmentDate
+        ? currentAppointment.appointmentDate.substring(0, 10)
         : ""
     );
 
   const [appointmentTime, setAppointmentTime] =
     useState(
-      editingAppointment?.appointmentTime
-        ? editingAppointment.appointmentTime.substring(
-            0,
-            5
-          )
+      currentAppointment?.appointmentTime
+        ? currentAppointment.appointmentTime.substring(0, 5)
         : ""
     );
 
   const [reason, setReason] = useState(
-    editingAppointment?.reason || ""
+    currentAppointment?.reason || ""
   );
 
   const [status, setStatus] = useState(
-    editingAppointment?.status || "Upcoming"
+    currentAppointment?.status || "Upcoming"
   );
 
   const [errors, setErrors] = useState({});
@@ -47,24 +46,26 @@ const AppointmentForm = ({
   const validateForm = () => {
     const newErrors = {};
 
-    if (!patientId) {
-      newErrors.patientId =
-        "Patient ID is required.";
-    } else if (
-      !/^[1-9][0-9]*$/.test(patientId)
-    ) {
-      newErrors.patientId =
-        "Patient ID must be a valid number.";
-    }
+    if (!isRescheduling) {
+      if (!patientId) {
+        newErrors.patientId =
+          "Patient ID is required.";
+      } else if (
+        !/^[1-9][0-9]*$/.test(patientId)
+      ) {
+        newErrors.patientId =
+          "Patient ID must be a valid number.";
+      }
 
-    if (!doctorId) {
-      newErrors.doctorId =
-        "Doctor ID is required.";
-    } else if (
-      !/^[1-9][0-9]*$/.test(doctorId)
-    ) {
-      newErrors.doctorId =
-        "Doctor ID must be a valid number.";
+      if (!doctorId) {
+        newErrors.doctorId =
+          "Doctor ID is required.";
+      } else if (
+        !/^[1-9][0-9]*$/.test(doctorId)
+      ) {
+        newErrors.doctorId =
+          "Doctor ID must be a valid number.";
+      }
     }
 
     if (!appointmentDate) {
@@ -77,20 +78,22 @@ const AppointmentForm = ({
         "Appointment time is required.";
     }
 
-    if (!reason.trim()) {
-      newErrors.reason =
-        "Appointment reason is required.";
-    } else if (reason.trim().length < 3) {
-      newErrors.reason =
-        "Reason must be at least 3 characters.";
-    } else if (reason.trim().length > 500) {
-      newErrors.reason =
-        "Reason cannot exceed 500 characters.";
-    }
+    if (!isRescheduling) {
+      if (!reason.trim()) {
+        newErrors.reason =
+          "Appointment reason is required.";
+      } else if (reason.trim().length < 3) {
+        newErrors.reason =
+          "Reason must be at least 3 characters.";
+      } else if (reason.trim().length > 500) {
+        newErrors.reason =
+          "Reason cannot exceed 500 characters.";
+      }
 
-    if (!status) {
-      newErrors.status =
-        "Appointment status is required.";
+      if (!status) {
+        newErrors.status =
+          "Appointment status is required.";
+      }
     }
 
     setErrors(newErrors);
@@ -102,6 +105,15 @@ const AppointmentForm = ({
     event.preventDefault();
 
     if (!validateForm()) {
+      return;
+    }
+
+    if (isRescheduling) {
+      onSubmit({
+        appointmentDate,
+        appointmentTime,
+      });
+
       return;
     }
 
@@ -125,13 +137,21 @@ const AppointmentForm = ({
         marginBottom: "30px",
       }}
     >
-      <h2>
-        {editingAppointment
+      <h2
+        style={{
+          marginTop: 0,
+          marginBottom: "25px",
+        }}
+      >
+        {isRescheduling
+          ? "Reschedule Appointment"
+          : editingAppointment
           ? "Edit Appointment"
           : "Add Appointment"}
       </h2>
 
       <form onSubmit={handleSubmit}>
+
         {/* Patient ID */}
         <div style={{ marginBottom: "20px" }}>
           <label>
@@ -148,12 +168,16 @@ const AppointmentForm = ({
               setPatientId(event.target.value)
             }
             placeholder="Enter patient ID"
+            disabled={isRescheduling}
             style={{
               width: "100%",
               maxWidth: "500px",
               padding: "10px",
               marginTop: "8px",
               boxSizing: "border-box",
+              backgroundColor: isRescheduling
+                ? "#f3f4f6"
+                : "#ffffff",
             }}
           />
 
@@ -180,12 +204,16 @@ const AppointmentForm = ({
               setDoctorId(event.target.value)
             }
             placeholder="Enter doctor ID"
+            disabled={isRescheduling}
             style={{
               width: "100%",
               maxWidth: "500px",
               padding: "10px",
               marginTop: "8px",
               boxSizing: "border-box",
+              backgroundColor: isRescheduling
+                ? "#f3f4f6"
+                : "#ffffff",
             }}
           />
 
@@ -208,9 +236,7 @@ const AppointmentForm = ({
             type="date"
             value={appointmentDate}
             onChange={(event) =>
-              setAppointmentDate(
-                event.target.value
-              )
+              setAppointmentDate(event.target.value)
             }
             style={{
               padding: "10px",
@@ -237,9 +263,7 @@ const AppointmentForm = ({
             type="time"
             value={appointmentTime}
             onChange={(event) =>
-              setAppointmentTime(
-                event.target.value
-              )
+              setAppointmentTime(event.target.value)
             }
             style={{
               padding: "10px",
@@ -255,74 +279,78 @@ const AppointmentForm = ({
         </div>
 
         {/* Reason */}
-        <div style={{ marginBottom: "20px" }}>
-          <label>
-            <strong>Reason</strong>
-          </label>
+        {!isRescheduling && (
+          <div style={{ marginBottom: "20px" }}>
+            <label>
+              <strong>Reason</strong>
+            </label>
 
-          <br />
+            <br />
 
-          <textarea
-            value={reason}
-            onChange={(event) =>
-              setReason(event.target.value)
-            }
-            placeholder="Enter appointment reason"
-            rows="4"
-            style={{
-              width: "100%",
-              maxWidth: "500px",
-              padding: "10px",
-              marginTop: "8px",
-              boxSizing: "border-box",
-            }}
-          />
+            <textarea
+              value={reason}
+              onChange={(event) =>
+                setReason(event.target.value)
+              }
+              placeholder="Enter appointment reason"
+              rows="4"
+              style={{
+                width: "100%",
+                maxWidth: "500px",
+                padding: "10px",
+                marginTop: "8px",
+                boxSizing: "border-box",
+              }}
+            />
 
-          {errors.reason && (
-            <p style={{ color: "red" }}>
-              {errors.reason}
-            </p>
-          )}
-        </div>
+            {errors.reason && (
+              <p style={{ color: "red" }}>
+                {errors.reason}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Status */}
-        <div style={{ marginBottom: "20px" }}>
-          <label>
-            <strong>Status</strong>
-          </label>
+        {!isRescheduling && (
+          <div style={{ marginBottom: "20px" }}>
+            <label>
+              <strong>Status</strong>
+            </label>
 
-          <br />
+            <br />
 
-          <select
-            value={status}
-            onChange={(event) =>
-              setStatus(event.target.value)
-            }
-            style={{
-              padding: "10px",
-              marginTop: "8px",
-              width: "200px",
-            }}
-          >
-            <option value="Upcoming">
-              Upcoming
-            </option>
+            <select
+              value={status}
+              onChange={(event) =>
+                setStatus(event.target.value)
+              }
+              style={{
+                padding: "10px",
+                marginTop: "8px",
+                width: "200px",
+              }}
+            >
+              <option value="Upcoming">
+                Upcoming
+              </option>
 
-            <option value="Completed">
-              Completed
-            </option>
+              <option value="Completed">
+                Completed
+              </option>
 
-            <option value="Cancelled">
-              Cancelled
-            </option>
-          </select>
+              <option value="Cancelled">
+                Cancelled
+              </option>
+            </select>
 
-          {errors.status && (
-            <p style={{ color: "red" }}>
-              {errors.status}
-            </p>
-          )}
-        </div>
+            {errors.status && (
+              <p style={{ color: "red" }}>
+                {errors.status}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Buttons */}
         <button
@@ -338,12 +366,14 @@ const AppointmentForm = ({
         >
           {loading
             ? "Saving..."
+            : isRescheduling
+            ? "Reschedule Appointment"
             : editingAppointment
             ? "Update Appointment"
             : "Add Appointment"}
         </button>
 
-        {editingAppointment && (
+        {(editingAppointment || isRescheduling) && (
           <button
             type="button"
             onClick={onCancel}

@@ -5,14 +5,9 @@ import AppointmentForm from "./AppointmentForm";
 import AppointmentList from "./AppointmentList";
 
 const Appointments = () => {
-  const [appointments, setAppointments] =
-    useState([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [formLoading, setFormLoading] =
-    useState(false);
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [formLoading, setFormLoading] = useState(false);
 
   const [editingAppointment, setEditingAppointment] =
     useState(null);
@@ -22,19 +17,12 @@ const Appointments = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  /*
-   * Initial Load
-   *
-   * The API call is placed directly inside
-   * the effect instead of calling a function
-   * that performs synchronous state updates.
-   */
   useEffect(() => {
-    const loadAppointments = async () => {
+    let isMounted = true;
+
+    const fetchAppointments = async () => {
       try {
-        const response = await api.get(
-          "/appointments"
-        );
+        const response = await api.get("/appointments");
 
         console.log(
           "Appointments response:",
@@ -50,30 +38,35 @@ const Appointments = () => {
           ? data
           : data.appointments || [];
 
-        setAppointments(appointmentData);
+        if (isMounted) {
+          setAppointments(appointmentData);
+          setLoading(false);
+        }
       } catch (err) {
         console.error(
           "Failed to fetch appointments:",
           err
         );
 
-        setError(
-          err.response?.data?.message ||
-            "Failed to load appointments."
-        );
-      } finally {
-        setLoading(false);
+        if (isMounted) {
+          setError(
+            err.response?.data?.message ||
+              "Failed to load appointments."
+          );
+
+          setLoading(false);
+        }
       }
     };
 
-    loadAppointments();
+    fetchAppointments();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  /*
-   * Refresh Appointments
-   *
-   * Used after Add, Update and Delete.
-   */
+
   const refreshAppointments = async () => {
     try {
       const response = await api.get(
@@ -109,31 +102,43 @@ const Appointments = () => {
   };
 
   
-  const handleSubmit = async (
-    appointmentData
-  ) => {
+  const handleSubmit = async (appointmentData) => {
     try {
       setFormLoading(true);
       setError("");
       setSuccess("");
 
       if (editingAppointment) {
-        await api.put(
+        // RESCHEDULE / UPDATE
+        const response = await api.put(
           `/appointments/${editingAppointment.id}`,
           appointmentData
         );
 
+        console.log(
+          "Appointment update response:",
+          response.data
+        );
+
         setSuccess(
-          "Appointment updated successfully."
+          response.data?.message ||
+            "Appointment rescheduled successfully."
         );
       } else {
-        await api.post(
+        // CREATE
+        const response = await api.post(
           "/appointments",
           appointmentData
         );
 
+        console.log(
+          "Appointment create response:",
+          response.data
+        );
+
         setSuccess(
-          "Appointment added successfully."
+          response.data?.message ||
+            "Appointment booked successfully."
         );
       }
 
@@ -159,7 +164,7 @@ const Appointments = () => {
     }
   };
 
-  
+
   const handleEdit = (appointment) => {
     setEditingAppointment(appointment);
 
@@ -176,18 +181,19 @@ const Appointments = () => {
     });
   };
 
-  
+
   const handleCancel = () => {
     setEditingAppointment(null);
 
     setError("");
+    setSuccess("");
 
     setFormKey(
       (previousKey) => previousKey + 1
     );
   };
 
-  
+ 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this appointment?"
@@ -201,12 +207,18 @@ const Appointments = () => {
       setError("");
       setSuccess("");
 
-      await api.delete(
+      const response = await api.delete(
         `/appointments/${id}`
       );
 
+      console.log(
+        "Appointment delete response:",
+        response.data
+      );
+
       setSuccess(
-        "Appointment deleted successfully."
+        response.data?.message ||
+          "Appointment deleted successfully."
       );
 
       await refreshAppointments();
@@ -223,6 +235,7 @@ const Appointments = () => {
     }
   };
 
+
   return (
     <div
       style={{
@@ -231,17 +244,21 @@ const Appointments = () => {
     >
       <h1>Appointments</h1>
 
-      <p>
-        Manage hospital appointments from this
-        page.
+      <p
+        style={{
+          marginBottom: "25px",
+        }}
+      >
+        Manage hospital appointments from this page.
       </p>
 
-      {/* Success Message */}
+      {/* SUCCESS MESSAGE */}
       {success && (
         <div
           style={{
             backgroundColor: "#e8f5e9",
-            color: "green",
+            color: "#166534",
+            border: "1px solid #bbf7d0",
             padding: "12px",
             marginBottom: "20px",
             borderRadius: "5px",
@@ -251,12 +268,13 @@ const Appointments = () => {
         </div>
       )}
 
-      {/* Error Message */}
+      {/* ERROR MESSAGE */}
       {error && (
         <div
           style={{
             backgroundColor: "#ffebee",
-            color: "red",
+            color: "#dc2626",
+            border: "1px solid #fecaca",
             padding: "12px",
             marginBottom: "20px",
             borderRadius: "5px",
@@ -266,7 +284,7 @@ const Appointments = () => {
         </div>
       )}
 
-      {/* Appointment Form */}
+      {/* APPOINTMENT FORM */}
       <AppointmentForm
         key={formKey}
         editingAppointment={editingAppointment}
@@ -275,7 +293,7 @@ const Appointments = () => {
         loading={formLoading}
       />
 
-      {/* Appointment List */}
+      {/* APPOINTMENT LIST */}
       <AppointmentList
         appointments={appointments}
         loading={loading}
