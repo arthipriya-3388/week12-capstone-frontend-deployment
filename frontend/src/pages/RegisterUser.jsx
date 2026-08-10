@@ -35,9 +35,6 @@ const RegisterUser = () => {
     setMessage("");
     setError("");
 
-    // -----------------------------
-    // Full Name Validation
-    // -----------------------------
 
     if (!formData.fullName.trim()) {
       setError("Full name is required.");
@@ -49,9 +46,7 @@ const RegisterUser = () => {
       return;
     }
 
-    // -----------------------------
-    // Email Validation
-    // -----------------------------
+    
 
     if (!formData.email.trim()) {
       setError("Email is required.");
@@ -67,9 +62,7 @@ const RegisterUser = () => {
       return;
     }
 
-    // -----------------------------
-    // Password Validation
-    // -----------------------------
+    
 
     if (!formData.password) {
       setError("Password is required.");
@@ -104,9 +97,7 @@ const RegisterUser = () => {
       return;
     }
 
-    // -----------------------------
-    // Phone Validation
-    // -----------------------------
+   
 
     if (!/^[0-9]{10}$/.test(formData.phone)) {
       setError(
@@ -114,10 +105,6 @@ const RegisterUser = () => {
       );
       return;
     }
-
-    // -----------------------------
-    // Register User
-    // -----------------------------
 
     try {
       setLoading(true);
@@ -164,11 +151,11 @@ const RegisterUser = () => {
         error.response?.data
       );
 
-      // Get backend message
+      
       const backendMessage =
         error.response?.data?.message;
 
-      // Get detailed validation errors
+      
       const validationErrors =
         error.response?.data?.data;
 

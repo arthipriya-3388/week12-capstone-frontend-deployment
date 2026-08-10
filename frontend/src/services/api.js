@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-    "https://week-12-capstone-project-arthipriya-3388.onrender.com/api",
+    "https://week-12-capstone-project-evaluation.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
