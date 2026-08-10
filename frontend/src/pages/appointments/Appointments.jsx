@@ -8,15 +8,15 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
-
   const [editingAppointment, setEditingAppointment] =
     useState(null);
-
   const [formKey, setFormKey] = useState(0);
-
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  /*
+   * Load appointments
+   */
   useEffect(() => {
     let isMounted = true;
 
@@ -30,7 +30,6 @@ const Appointments = () => {
         );
 
         const responseData = response.data;
-
         const data =
           responseData.data || responseData;
 
@@ -40,7 +39,6 @@ const Appointments = () => {
 
         if (isMounted) {
           setAppointments(appointmentData);
-          setLoading(false);
         }
       } catch (err) {
         console.error(
@@ -53,7 +51,9 @@ const Appointments = () => {
             err.response?.data?.message ||
               "Failed to load appointments."
           );
-
+        }
+      } finally {
+        if (isMounted) {
           setLoading(false);
         }
       }
@@ -66,12 +66,13 @@ const Appointments = () => {
     };
   }, []);
 
-
+  /*
+   * Refresh appointments after
+   * create / reschedule / cancel / delete
+   */
   const refreshAppointments = async () => {
     try {
-      const response = await api.get(
-        "/appointments"
-      );
+      const response = await api.get("/appointments");
 
       console.log(
         "Updated appointments response:",
@@ -79,7 +80,6 @@ const Appointments = () => {
       );
 
       const responseData = response.data;
-
       const data =
         responseData.data || responseData;
 
@@ -101,7 +101,9 @@ const Appointments = () => {
     }
   };
 
-  
+  /*
+   * Add appointment / Reschedule appointment
+   */
   const handleSubmit = async (appointmentData) => {
     try {
       setFormLoading(true);
@@ -109,36 +111,22 @@ const Appointments = () => {
       setSuccess("");
 
       if (editingAppointment) {
-        // RESCHEDULE / UPDATE
-        const response = await api.put(
+        await api.put(
           `/appointments/${editingAppointment.id}`,
           appointmentData
         );
 
-        console.log(
-          "Appointment update response:",
-          response.data
-        );
-
         setSuccess(
-          response.data?.message ||
-            "Appointment rescheduled successfully."
+          "Appointment rescheduled successfully."
         );
       } else {
-        // CREATE
-        const response = await api.post(
+        await api.post(
           "/appointments",
           appointmentData
         );
 
-        console.log(
-          "Appointment create response:",
-          response.data
-        );
-
         setSuccess(
-          response.data?.message ||
-            "Appointment booked successfully."
+          "Appointment added successfully."
         );
       }
 
@@ -164,8 +152,12 @@ const Appointments = () => {
     }
   };
 
-
-  const handleEdit = (appointment) => {
+  /*
+   * Reschedule appointment
+   *
+   * Opens the existing appointment in the form.
+   */
+  const handleReschedule = (appointment) => {
     setEditingAppointment(appointment);
 
     setError("");
@@ -181,19 +173,61 @@ const Appointments = () => {
     });
   };
 
+  /*
+   * Cancel appointment
+   */
+  const handleCancelAppointment = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to cancel this appointment?"
+    );
 
-  const handleCancel = () => {
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setError("");
+      setSuccess("");
+
+      await api.put(`/appointments/${id}`, {
+        status: "Cancelled",
+      });
+
+      setSuccess(
+        "Appointment cancelled successfully."
+      );
+
+      await refreshAppointments();
+    } catch (err) {
+      console.error(
+        "Failed to cancel appointment:",
+        err
+      );
+
+      setError(
+        err.response?.data?.message ||
+          "Failed to cancel appointment."
+      );
+    }
+  };
+
+  /*
+   * Cancel rescheduling
+   *
+   * This is the Cancel button inside the form.
+   */
+  const handleFormCancel = () => {
     setEditingAppointment(null);
-
     setError("");
-    setSuccess("");
 
     setFormKey(
       (previousKey) => previousKey + 1
     );
   };
 
- 
+  /*
+   * Delete appointment
+   */
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this appointment?"
@@ -207,18 +241,12 @@ const Appointments = () => {
       setError("");
       setSuccess("");
 
-      const response = await api.delete(
+      await api.delete(
         `/appointments/${id}`
       );
 
-      console.log(
-        "Appointment delete response:",
-        response.data
-      );
-
       setSuccess(
-        response.data?.message ||
-          "Appointment deleted successfully."
+        "Appointment deleted successfully."
       );
 
       await refreshAppointments();
@@ -235,7 +263,6 @@ const Appointments = () => {
     }
   };
 
-
   return (
     <div
       style={{
@@ -249,16 +276,16 @@ const Appointments = () => {
           marginBottom: "25px",
         }}
       >
-        Manage hospital appointments from this page.
+        Manage hospital appointments from this
+        page.
       </p>
 
-      {/* SUCCESS MESSAGE */}
+      {/* Success Message */}
       {success && (
         <div
           style={{
             backgroundColor: "#e8f5e9",
-            color: "#166534",
-            border: "1px solid #bbf7d0",
+            color: "green",
             padding: "12px",
             marginBottom: "20px",
             borderRadius: "5px",
@@ -268,13 +295,12 @@ const Appointments = () => {
         </div>
       )}
 
-      {/* ERROR MESSAGE */}
+      {/* Error Message */}
       {error && (
         <div
           style={{
             backgroundColor: "#ffebee",
-            color: "#dc2626",
-            border: "1px solid #fecaca",
+            color: "red",
             padding: "12px",
             marginBottom: "20px",
             borderRadius: "5px",
@@ -284,20 +310,21 @@ const Appointments = () => {
         </div>
       )}
 
-      {/* APPOINTMENT FORM */}
+      {/* Appointment Form */}
       <AppointmentForm
         key={formKey}
         editingAppointment={editingAppointment}
         onSubmit={handleSubmit}
-        onCancel={handleCancel}
+        onCancel={handleFormCancel}
         loading={formLoading}
       />
 
-      {/* APPOINTMENT LIST */}
+      {/* Appointment List */}
       <AppointmentList
         appointments={appointments}
         loading={loading}
-        onEdit={handleEdit}
+        onReschedule={handleReschedule}
+        onCancel={handleCancelAppointment}
         onDelete={handleDelete}
       />
     </div>

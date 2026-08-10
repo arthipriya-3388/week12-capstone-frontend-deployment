@@ -2,22 +2,11 @@ const AppointmentList = ({
   appointments,
   loading,
   onReschedule,
-  onCancelAppointment,
+  onCancel,
   onDelete,
 }) => {
   if (loading) {
-    return (
-      <div
-        style={{
-          backgroundColor: "#ffffff",
-          padding: "20px",
-          borderRadius: "10px",
-          border: "1px solid #ddd",
-        }}
-      >
-        Loading appointments...
-      </div>
-    );
+    return <p>Loading appointments...</p>;
   }
 
   if (!appointments.length) {
@@ -31,7 +20,6 @@ const AppointmentList = ({
         }}
       >
         <h2>Appointment List</h2>
-
         <p>No appointments found.</p>
       </div>
     );
@@ -48,49 +36,24 @@ const AppointmentList = ({
     >
       <h2>Appointment List</h2>
 
-      <div
-        style={{
-          overflowX: "auto",
-        }}
-      >
+      <div style={{ overflowX: "auto" }}>
         <table
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            minWidth: "1000px",
+            minWidth: "1100px",
           }}
         >
           <thead>
             <tr>
               <th style={headerStyle}>ID</th>
-
-              <th style={headerStyle}>
-                Patient ID
-              </th>
-
-              <th style={headerStyle}>
-                Doctor ID
-              </th>
-
-              <th style={headerStyle}>
-                Appointment Date
-              </th>
-
-              <th style={headerStyle}>
-                Appointment Time
-              </th>
-
-              <th style={headerStyle}>
-                Reason
-              </th>
-
-              <th style={headerStyle}>
-                Status
-              </th>
-
-              <th style={headerStyle}>
-                Actions
-              </th>
+              <th style={headerStyle}>Patient ID</th>
+              <th style={headerStyle}>Doctor ID</th>
+              <th style={headerStyle}>Appointment Date</th>
+              <th style={headerStyle}>Appointment Time</th>
+              <th style={headerStyle}>Reason</th>
+              <th style={headerStyle}>Status</th>
+              <th style={headerStyle}>Actions</th>
             </tr>
           </thead>
 
@@ -111,19 +74,13 @@ const AppointmentList = ({
 
                 <td style={cellStyle}>
                   {appointment.appointmentDate
-                    ? appointment.appointmentDate.substring(
-                        0,
-                        10
-                      )
+                    ? appointment.appointmentDate.substring(0, 10)
                     : "-"}
                 </td>
 
                 <td style={cellStyle}>
                   {appointment.appointmentTime
-                    ? appointment.appointmentTime.substring(
-                        0,
-                        5
-                      )
+                    ? appointment.appointmentTime.substring(0, 5)
                     : "-"}
                 </td>
 
@@ -136,11 +93,9 @@ const AppointmentList = ({
                     style={{
                       fontWeight: "600",
                       color:
-                        appointment.status ===
-                        "Upcoming"
+                        appointment.status === "Upcoming"
                           ? "#2563eb"
-                          : appointment.status ===
-                            "Completed"
+                          : appointment.status === "Completed"
                           ? "#16a34a"
                           : "#dc2626",
                     }}
@@ -150,9 +105,8 @@ const AppointmentList = ({
                 </td>
 
                 <td style={cellStyle}>
-                  {/* Reschedule */}
-                  {appointment.status ===
-                    "Upcoming" && (
+                  {/* RESCHEDULE */}
+                  {appointment.status === "Upcoming" && (
                     <button
                       type="button"
                       onClick={() =>
@@ -161,34 +115,31 @@ const AppointmentList = ({
                       style={{
                         padding: "7px 12px",
                         marginRight: "8px",
-                        marginBottom: "5px",
+                        cursor: "pointer",
                       }}
                     >
                       Reschedule
                     </button>
                   )}
 
-                  {/* Cancel Appointment */}
-                  {appointment.status ===
-                    "Upcoming" && (
+                  {/* CANCEL */}
+                  {appointment.status === "Upcoming" && (
                     <button
                       type="button"
                       onClick={() =>
-                        onCancelAppointment(
-                          appointment.id
-                        )
+                        onCancel(appointment.id)
                       }
                       style={{
                         padding: "7px 12px",
                         marginRight: "8px",
-                        marginBottom: "5px",
+                        cursor: "pointer",
                       }}
                     >
                       Cancel Appointment
                     </button>
                   )}
 
-                  {/* Delete */}
+                  {/* DELETE */}
                   <button
                     type="button"
                     onClick={() =>
@@ -196,7 +147,7 @@ const AppointmentList = ({
                     }
                     style={{
                       padding: "7px 12px",
-                      marginBottom: "5px",
+                      cursor: "pointer",
                     }}
                   >
                     Delete
